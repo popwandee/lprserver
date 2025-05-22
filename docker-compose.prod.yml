@@ -1,0 +1,41 @@
+services:
+
+  web:
+    build:
+      context: ./services/web
+      dockerfile: Dockerfile.prod
+    image: lprserver-web:v2
+    command: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:5001 manage:app --log-level=info
+    volumes:
+      - ./services/web:/usr/src/app
+      - static_volume:/home/app/web/project/static
+      - media_volume:/home/app/web/project/media
+    expose:
+      - "5001"
+    env_file: 
+      - ./.env.prod
+    depends_on:
+      - db
+
+  nginx:
+    build: ./services/nginx
+    image: lprserver-nginx:v2
+    volumes:
+      - static_volume:/home/app/web/project/static
+      - media_volume:/home/app/web/project/media
+    ports:
+      - "1338:80"
+    depends_on:
+      - web
+  
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    env_file:
+      - ./.env.prod.db
+ 
+volumes:
+  postgres_data_prod:
+  static_volume:
+  media_volume:

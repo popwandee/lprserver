@@ -1,0 +1,19 @@
+<h4>Live Chat</h4>
+<div id="chat-box" class="border p-2" style="height: 200px; overflow-y: scroll;"></div>
+<form id="chat-form">
+  <input type="text" id="chat-message" class="form-control" placeholder="พิมพ์ข้อความ..." />
+</form>
+<script>
+  const socket = io("/admin");
+  const chatForm = document.getElementById('chat-form');
+  chatForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const msg = document.getElementById('chat-message').value;
+    socket.emit('admin_chat', { message: msg });
+  });
+
+  socket.on('edge_reply', data => {
+    const box = document.getElementById('chat-box');
+    box.innerHTML += `<div><b>${data.edge_id}:</b> ${data.message}</div>`;
+  });
+</script>

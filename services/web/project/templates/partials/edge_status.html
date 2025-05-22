@@ -1,0 +1,16 @@
+<h4>Edge Devices</h4>
+<table class="table">
+  <thead>
+    <tr><th>ID</th><th>Name</th><th>Status</th><th>Last Seen</th></tr>
+  </thead>
+  <tbody>
+    {% for edge in edges %}
+    <tr>
+      <td>{{ edge.id }}</td>
+      <td>{{ edge.name }}</td>
+      <td>{{ edge.status }}</td>
+      <td>{{ edge.last_seen }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

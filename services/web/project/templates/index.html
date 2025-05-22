@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Connect to the Socket.IO server via Nginx
+            const socket = io('http://lprserver:1337');
+
+            // Listen for refresh_dashboard events
+            socket.on('refresh_dashboard', (data) => {
+                console.log(data.message);
+                location.reload(); // Reload the page when new data is added
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+        }
+        main {
+            padding: 2rem;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            margin: 0 0 1rem;
+        }
+        .card a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .card a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dashboard</h1>
+    </header>
+    <main>
+        <div class="card">
+            <h2>License Plate Detections</h2>
+            <p>View and manage all license plate detections.</p>
+            <a href="{{ url_for('list_detections') }}">View Detections</a>
+        </div>
+        <div class="card">
+            <h2>Upload Files</h2>
+            <p>Upload images or other files for processing.</p>
+            <a href="{{ url_for('upload_file') }}">Go to Upload</a>
+        </div>
+        <div class="card">
+            <h2>System Info</h2>
+            <p>Check the system's health, status, and version information.</p>
+            <a href="{{ url_for('version') }}">View System Info</a>
+        </div>
+    </main>
+</body>
+</html>

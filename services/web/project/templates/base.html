@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}AI Camera Dashboard{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="//cdn.socket.io/socket.io-3.0.3.min.js"></script>
+</head>
+<body>
+  {% include 'partials/sidebar.html' %}
+  <main>
+    {% include 'partials/topbar.html' %}
+    <div class="container">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+</body>
+</html>

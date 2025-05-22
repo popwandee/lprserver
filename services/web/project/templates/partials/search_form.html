@@ -1,0 +1,9 @@
+<form method="GET" action="{{ url_for('vehicles.search') }}" class="mb-3">
+    <div class="row">
+      <div class="col"><input name="plate" placeholder="ค้นหาทะเบียน" class="form-control" /></div>
+      <div class="col"><input type="datetime-local" name="start_time" class="form-control" /></div>
+      <div class="col"><input type="datetime-local" name="end_time" class="form-control" /></div>
+      <div class="col"><button type="submit" class="btn btn-primary">ค้นหา</button></div>
+    </div>
+  </form>
+  

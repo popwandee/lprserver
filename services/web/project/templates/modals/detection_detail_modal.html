@@ -1,0 +1,19 @@
+<script src="https://cdn.socket.io/4.5.1/socket.io.min.js"></script>
+<script>
+const socket = io('/lpr');
+
+socket.on('connect', () => {
+  console.log('Connected to /lpr');
+});
+
+socket.on('lpr_response', function(data) {
+  if (data.status === "success") {
+    const modal = document.getElementById('detection-detail-modal');
+    modal.querySelector(".modal-body").innerHTML = `
+      <p>ทะเบียน: ${data.detection.license_plate}</p>
+      <img src="/${data.detection.image_path}" style="width: 100%;">
+    `;
+  }
+});
+</script>
+

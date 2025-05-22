@@ -1,0 +1,18 @@
+<h4>Detections</h4>
+<table class="table table-striped">
+  <thead><tr><th>Time</th><th>Plate</th><th>Edge</th><th>Image</th></tr></thead>
+  <tbody>
+    {% for d in detections %}
+    <tr>
+      <td>{{ d.timestamp }}</td>
+      <td>{{ d.plate_text }}</td>
+      <td>{{ d.edge_id }}</td>
+      <td>
+        <a href="#" data-toggle="modal" data-target="#modal-{{ d.id }}">
+          <img src="{{ url_for('static', filename=d.image_path) }}" height="40" />
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+  <h1 class="mb-4">Dashboard</h1>
+  {% include 'partials/stats_cards.html' %}
+  <div class="row">
+    <div class="col-md-8">
+      {% include 'partials/edge_status.html' %}
+      {% include 'partials/search_form.html' %}
+      {% include 'partials/detections_table.html' %}
+    </div>
+    <div class="col-md-4">
+      {% include 'partials/alert_panel.html' %}
+      {% include 'partials/chat_panel.html' %}
+      {% include 'partials/user_profile.html' %}
+    </div>
+  </div>
+  {% include 'modals/detection_detail_modal.html' %}
+{% endblock %}
+

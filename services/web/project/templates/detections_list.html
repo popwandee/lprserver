@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+    <title>Detections List</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        img {
+            width: 100px; /* Adjust the thumbnail size as needed */
+        }
+    </style>
+</head>
+<body>
+    <h1>License Plate Detections</h1>
+    <table>
+        <thead>
+            <tr><td colspan="4">
+                <button id="edge1RemoteCaptureBtn" edge_hostname="aicamera1">Remote AICamera 1 Capture</button>
+
+                <pre id="output"></pre></td></tr>
+            <tr>
+                <th>License Plate</th>
+                <th>Timestamp</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detection in detections %}
+            <tr>
+                <td>{{ detection.license_plate }}</td>
+                <td>{{ detection.timestamp }}</td>
+                <td>
+                    <a href="{{ url_for('detection_detail', detection_id=detection.id) }}">
+                        <img src="{{ url_for('mediafiles', filename=detection.image_path.replace('media/', '')) }}" alt="License Plate">
+                    </a>
+                </td>
+                <td><button id="sendBtn">Take Photo</button>
+                    <pre id="output"></pre></td>
+            </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        document.getElementById('sendBtn').addEventListener('click', () => {
+            fetch('/runscript', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('output').textContent =
+                    data.status === 'success' ? data.output : `Error: ${data.error}`;
+            });
+        });
+        document.getElementById('edge1RemoteCaptureBtn').addEventListener('click', () => {
+            const edgeHostname = this.getAttribute('edge_hostname');
+            fetch('/remote_capture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ edge_hostname: edgeHostname })  
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('remoteOutput').textContent =
+                    data.status === 'success' ? data.output : `Error: ${data.error}`;
+            });
+        });
+
+    </script>
+</body>
+</html>

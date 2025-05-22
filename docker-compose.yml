@@ -1,0 +1,25 @@
+services:
+
+  web:
+    build: ./services/web
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/web/:/usr/src/app/
+    ports:
+      - "5001:5001"
+    env_file: 
+      - ./.env.dev
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: alpruser
+      POSTGRES_PASSWORD: alprpass
+      POSTGRES_DB: alprdb
+volumes:
+  postgres_data:
+    driver: local

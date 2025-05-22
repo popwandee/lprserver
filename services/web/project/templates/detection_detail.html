@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+<head>
+    <title>Detection Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 20px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .image-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Detection Detail</h1>
+        <table>
+            <tr>
+                <th>License Plate</th>
+                <td>{{ detection.license_plate }}</td>
+            </tr>
+            <tr>
+                <th>Timestamp</th>
+                <td>{{ detection.timestamp }}</td>
+            </tr>
+            <tr>
+                <th>Location</th>
+                <td>{{ detection.location_lat }}, {{ detection.location_lon }}</td>
+            </tr>
+            <tr>
+                <th>Info</th>
+                <td>{{ detection.info }}</td>
+            </tr>
+            
+            <tr>
+                <th colspan="2">Detection Image:</th>
+            </tr>
+        </table>
+        
+        <div class="image-container">
+            <img src="{{ url_for('mediafiles', filename=detection.image_path.replace('media/', '')) }}" alt="Detection Image">
+        </div>
+        
+        <a href="{{ url_for('list_detections') }}" class="back-link">← Back to List</a>
+    </div>
+</body>
+</html>

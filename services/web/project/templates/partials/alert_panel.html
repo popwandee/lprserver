@@ -1,0 +1,8 @@
+<h4>Blacklist Alerts</h4>
+<ul class="list-group mb-3">
+  {% for alert in blacklist_alerts %}
+  <li class="list-group-item text-danger">
+    🚨 {{ alert.plate_text }} พบที่ {{ alert.edge_id }} เวลา {{ alert.timestamp }}
+  </li>
+  {% endfor %}
+</ul>

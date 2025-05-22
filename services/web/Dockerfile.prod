@@ -1,0 +1,75 @@
+################
+##   BUILDER  ##
+################
+
+# pull official base image
+FROM python:3.12 AS builder
+
+# set work directory
+WORKDIR /usr/src/app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+
+#install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc
+
+# lint
+RUN pip install --upgrade pip
+#RUN pip install --no-cache-dir flake8
+COPY . /usr/src/app/
+#RUN flake8 --ignore=E302,E305,E501,F401 --exclude=hailo .
+
+# install dependencies
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+################
+##    FINAL   ##
+################
+
+# pull official base image
+FROM python:3.12
+
+# create directory for the app user
+RUN mkdir -p /home/app
+
+# create the app user
+RUN addgroup --system app && \
+    adduser --system --group app 
+
+# create the appropriate directories
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+
+#install dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends netcat-openbsd
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install --no-cache /wheels/*
+
+# copy entrypoint-prod.sh
+COPY ./entrypoint.prod.sh $APP_HOME
+
+# copy project
+COPY . $APP_HOME
+
+# Ensure correct ownership of the media directory
+RUN mkdir -p /home/app/web/project/media && chown -R app:app /home/app/web/project/media
+
+# chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+# change to the app user
+USER app
+
+# run the entrypoint script
+ENTRYPOINT [ "/home/app/web/entrypoint.prod.sh" ]
+
